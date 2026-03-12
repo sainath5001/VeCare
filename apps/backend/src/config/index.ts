@@ -20,11 +20,22 @@ const hasCriticalEnvVars = process.env.OPENAI_API_KEY && process.env.PORT;
 if (!hasCriticalEnvVars && !process.env.SKIP_DOTENV) {
   console.log('📁 Loading from .env file...');
   let result = config({ path: envPath });
-  // Fallback: try cwd (e.g. when run from apps/backend or ts-node resolves __dirname differently)
+  // Fallback 1: try cwd with same name (e.g. when run from apps/backend)
   if (!result?.parsed && !process.env.OPENAI_API_KEY) {
     const cwdPath = path.resolve(process.cwd(), envFileName);
     console.log('   Trying fallback path:', cwdPath);
     result = config({ path: cwdPath });
+  }
+  // Fallback 2: try .env in backend folder (so .env works if someone created that instead of .env.development.local)
+  if (!result?.parsed) {
+    const plainEnvPath = path.resolve(__dirname, '..', '.env');
+    result = config({ path: plainEnvPath });
+    if (result?.parsed) console.log('   Loaded from .env');
+  }
+  if (!result?.parsed) {
+    const plainCwd = path.resolve(process.cwd(), '.env');
+    result = config({ path: plainCwd });
+    if (result?.parsed) console.log('   Loaded from .env (cwd)');
   }
 } else {
   console.log('✅ Using existing environment variables (skipping .env file)');

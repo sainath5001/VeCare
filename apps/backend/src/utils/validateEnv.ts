@@ -1,11 +1,13 @@
 import { makeValidator, cleanEnv, port, str } from 'envalid';
 
 const openApiKey = makeValidator((apiKey: string) => {
+  if (!apiKey || apiKey.trim() === '') {
+    return ''; // Optional when SKIP_AI_VERIFICATION=true
+  }
   if (/^sk-proj-.{100,}$/.test(apiKey)) {
     return apiKey;
-  } else {
-    throw new Error('Please obtain a valid OpenAPI-Key from https://platform.openai.com/api-keys');
   }
+  throw new Error('Please obtain a valid OpenAPI-Key from https://platform.openai.com/api-keys');
 });
 
 export const ValidateEnv = () => {
@@ -20,7 +22,7 @@ export const ValidateEnv = () => {
     ADMIN_PRIVATE_KEY: str({ default: '' }),
     NETWORK_URL: str({ devDefault: 'http://localhost:8669' }),
     NETWORK_TYPE: str({ devDefault: 'solo' }),
-    OPENAI_API_KEY: openApiKey(),
+    OPENAI_API_KEY: openApiKey({ default: '' }),
     MAX_FILE_SIZE: str({ devDefault: '10mb' }),
     ADMIN_ADDRESS: str({ default: '' }),
     PINATA_API_KEY: str({ default: '' }),
