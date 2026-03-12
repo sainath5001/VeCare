@@ -1,0 +1,51 @@
+# Dockerfile.backend
+# Multi-stage Dockerfile that builds the backend from the monorepo root.
+# Build context MUST be the repository root so workspace packages (e.g. @repo/config-contract)
+# are available during the build.
+
+########################
+# Builder stage
+########################
+FROM node:18-bullseye AS builder
+WORKDIR /usr/src/app
+
+# Copy root manifests first for better caching
+COPY package.json yarn.lock ./
+
+# Copy entire repo so workspaces resolve
+COPY . .
+
+# Enable corepack to use Yarn as declared in the repo
+RUN corepack enable || true
+
+# Install all dependencies for the monorepo (dev + prod) so builds succeed
+RUN yarn install --frozen-lockfile --network-concurrency 1
+
+# Build the backend workspace (adjust if backend build script differs)
+RUN yarn --cwd apps/backend build
+
+
+########################
+# Production image
+########################
+FROM node:18-bullseye-slim AS prod
+WORKDIR /usr/src/app
+
+ENV NODE_ENV=production
+
+# Copy backend build output
+COPY --from=builder /usr/src/app/apps/backend/dist ./dist
+
+# Copy backend package.json so runtime knows metadata
+COPY --from=builder /usr/src/app/apps/backend/package.json ./package.json
+
+# Copy node_modules from builder (contains workspace installed packages)
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+
+# Copy any runtime assets the backend needs (optional)
+# COPY --from=builder /usr/src/app/apps/backend/prisma ./prisma
+
+EXPOSE 3000
+
+# Default command - adjust if your backend entrypoint differs
+CMD ["node", "dist/server.js"]

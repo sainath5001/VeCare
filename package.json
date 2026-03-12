@@ -1,0 +1,39 @@
+{
+  "name": "x-app-template",
+  "private": true,
+  "scripts": {
+    "build:backend": "npm --prefix ./apps/backend run build",
+    "start:backend": "npm --prefix ./apps/backend run start",
+    "dev:backend": "npm --prefix ./apps/backend run dev",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "test": "turbo test",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "contracts:compile": "turbo run compile",
+    "contracts:test": "turbo run contracts:test",
+    "contracts:deploy:solo": "turbo run deploy:solo",
+    "contracts:deploy:testnet": "turbo run deploy:testnet",
+    "contracts:solo-up": "turbo run solo-up",
+    "contracts:solo-down": "turbo run solo-down",
+    "vecare:deploy:solo": "turbo run vecare:deploy:solo",
+    "vecare:deploy:testnet": "turbo run vecare:deploy:testnet"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^4.1.14",
+    "turbo": "^2.1.2"
+  },
+  "packageManager": "yarn@1.22.21",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "resolutions": {
+    "elliptic": "6.6.1"
+  }
+}

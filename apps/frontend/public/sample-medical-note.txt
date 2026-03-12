@@ -1,0 +1,17 @@
+MEDICAL CERTIFICATE / DOCTOR'S NOTE
+-----------------------------------
+
+Patient Name: Jane Doe
+Date: [Current Date]
+Reference No.: VECARE-TEST-001
+
+This is to certify that the above-named patient is under medical care and requires financial assistance for ongoing treatment and related expenses.
+
+Recommendation: Support for medical crowdfunding campaign is appropriate.
+
+This document is for testing the VeCare platform only.
+
+-----------------------------------
+[Doctor's Name]
+[Clinic/Hospital Name]
+[Contact]
