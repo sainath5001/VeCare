@@ -1,0 +1,22 @@
+VECARE - FIRST-TIME SETUP (read after git clone)
+================================================
+
+1. OPEN THE RIGHT FOLDER IN VS CODE
+   After cloning, you get a folder (e.g. "VeCare"). In VS Code:
+   - File → Open Folder
+   - Choose that folder (the one that CONTAINS "apps" and "packages").
+   - You must see in the left sidebar: apps, packages, package.json.
+   If you open the parent folder, you will NOT see the project properly.
+
+2. INSTALL DEPENDENCIES
+   In VS Code terminal (Terminal → New Terminal), from project root run:
+   yarn install
+
+3. ENV FILES (create these - they are not in the repo)
+   - apps/backend: create .env.development.local (see .env.development.local.example)
+   - apps/frontend: create .env.local with: VITE_API_URL=http://localhost:3000
+
+4. RUN THE APP
+   Terminal 1: yarn dev:backend
+   Terminal 2: yarn dev:frontend
+   Open browser: http://localhost:5173

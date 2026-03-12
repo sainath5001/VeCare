@@ -303,14 +303,15 @@ export const CampaignBrowser: React.FC = () => {
     );
   }
 
-  const useMockInDev = import.meta.env.DEV && campaigns.length === 0;
+  // Show mock campaigns when list is empty (dev or clone) so the UI always has sample data
+  const showMockWhenEmpty = campaigns.length === 0;
   const mockForDisplay =
     filter === "my" && account
       ? MOCK_CAMPAIGNS.map((c) => ({ ...c, creator: account }))
       : filter === "my"
         ? []
         : MOCK_CAMPAIGNS;
-  const displayList = useMockInDev
+  const displayList = showMockWhenEmpty
     ? mockForDisplay
     : filter === "my" && account
       ? campaigns.filter((c) => c.creator?.toLowerCase() === account?.toLowerCase())
@@ -352,7 +353,7 @@ export const CampaignBrowser: React.FC = () => {
             </Center>
           ) : (
             <>
-              {useMockInDev && (
+              {showMockWhenEmpty && (
                 <Text fontSize="sm" color="gray.500" fontStyle="italic">
                   Sample data for demo — real campaigns will appear when the app is connected to the chain.
                 </Text>
